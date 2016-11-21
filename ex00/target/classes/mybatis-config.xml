@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- DTD 파일이란? Document Type Definition의 약자로, XML파일의 구조를 잡아주는 역할을 합니다.
+	DTD를 선언하고 Ctrl+Space를 하면 자동완성을 쉽게 할 수 있습니다. -->
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+</configuration>

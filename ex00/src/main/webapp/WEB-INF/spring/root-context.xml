@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- 해당 class의 속성이 org.springframework.jdbc.XXX 이므로 spring-jdbc 모듈을 이용 -->
+		<!-- <property name="driverClassName" value="org.mariadb.jdbc.Driver"></property> -->
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
+		<!-- log4jdbc-log4j2 추가 시 필요한 파일 : src/main/resources의 logback.xml 과 log4jdbc.log2j.properties -->
+		<!-- <property name="url" value="jdbc:mariadb://localhost/test"></property> -->
+		<property name="url" value="jdbc:log4jdbc:mariadb://localhost/test"></property>
+		<property name="username" value="tester"></property>
+		<property name="password" value="1541"></property>
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- 해당 class의 속성이 org.mybatis.spring.XXX 이므로 MyBatis-Spring 모듈을 이용 -->
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
+	</bean>
+	
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+	<!-- SqlSessionTemplate : mybatis-spring 라이브러리, 데이터베이스의 연결과 종료 처리, 트랜잭션과 쓰레드 안정성 등 보장 -->
+	<!--                    : MyBatis의 SqlSession 인터페이스를 구현한 클래스, SqlSesionFactory를 생성자로 주입하여 설정 -->
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory">
+		</constructor-arg>
+	</bean>
+	
+	<context:component-scan base-package="org.zerock.persistence">
+	</context:component-scan>
+		
+</beans>
